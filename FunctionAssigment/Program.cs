@@ -1,59 +1,74 @@
-﻿namespace FunctionAssigment
+﻿using System;
+
+class Program
 {
-    internal class Program
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
+        // Selkeä, luettava "orkestrointi":
+        string name = KysyNimi();
+        int age = KysyIka();
+
+        TulostaNimiJaIka(name, age);
+        TarkistaTaysiIkainen(age);
+        VertaaNimea(name, "Matti");
+    }
+
+    // 1) Nimen kysyminen + validointi
+    static string KysyNimi()
+    {
+        while (true)
         {
-            // Everything is intentionally inside Main before refactoring to functions
-            //Your job is to refactor this code to use functions for better readability and reusability.
-            //Check learn on how to do this
+            Console.Write("Enter your name: ");
+            string? input = Console.ReadLine();
 
-            string name = "";
-            int age = 0;
-            bool valid = false;
+            if (!string.IsNullOrWhiteSpace(input))
+                return input.Trim();
 
-            // Ask for name and ensure it is not empty
-            while (!valid)
-            {
-                Console.Write("Enter your name: ");
-                name = Console.ReadLine();
-                if (!string.IsNullOrWhiteSpace(name))
-                    valid = true;
-                else
-                    Console.WriteLine("Name cannot be empty.");
-            }
+            Console.WriteLine("Name cannot be empty.");
+        }
+    }
 
-            // Ask for age and ensure it is a positive integer
-            valid = false;
-            while (!valid)
-            {
-                Console.Write("Enter your age: ");
-                string input = Console.ReadLine();
-                if (int.TryParse(input, out age) && age > 0)
-                    valid = true;
-                else
-                    Console.WriteLine("Please enter a positive integer.");
-            }
+    // 2) Iän kysyminen + validointi
+    static int KysyIka()
+    {
+        while (true)
+        {
+            Console.Write("Enter your age: ");
+            string? input = Console.ReadLine();
 
-            // Print name and age
-            Console.WriteLine($"Your name is {name} and your age is {age}.");
+            if (int.TryParse(input, out int age) && age > 0)
+                return age;
 
-            // Check if the user is an adult
-            if (age >= 18)
-                Console.WriteLine("You are an adult.");
-            else
-                Console.WriteLine("You are not an adult.");
+            Console.WriteLine("Please enter a positive integer.");
+        }
+    }
 
-            // Compare the name to another string (e.g., "Matti")
-            string compareName = "Matti";
+    // 3) Tulostus erillisenä vastuuna
+    static void TulostaNimiJaIka(string name, int age)
+    {
+        Console.WriteLine($"Your name is {name} and your age is {age}.");
+    }
 
-            // Comparison ignoring case
-            if (name.Equals(compareName, StringComparison.OrdinalIgnoreCase))
-                Console.WriteLine("Your name matches 'Matti' (case-insensitive).");
+    // 4) Täysi-ikäisyyden tarkistus
+    static bool TarkistaTaysiIkainen(int age)
+    {
+        //Here we retun the result of comparison directly
+        return age >= 18;
+    }
 
-            // Exact match comparison (case-sensitive)
-            if (name.Equals(compareName))
-                Console.WriteLine("Your name is exactly 'Matti' (case-sensitive).");
+    // 5) Nimen vertailu toiseen merkkijonoon
+    static void VertaaNimea(string name, string compareTo)
+    {
+        // Case-insensitive (suositeltu: Equals + StringComparison)
+        if (name.Equals(compareTo, StringComparison.OrdinalIgnoreCase))
+        {
+            Console.WriteLine($"Your name matches '{compareTo}' (case-insensitive).");
+        }
+
+        // Case-sensitive tarkka vertailu
+        if (name.Equals(compareTo))
+        {
+            Console.WriteLine($"Your name is exactly '{compareTo}' (case-sensitive).");
         }
     }
 }
